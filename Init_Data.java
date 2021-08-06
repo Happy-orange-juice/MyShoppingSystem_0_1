@@ -1,47 +1,34 @@
 package MyShoppingSystem_0_1;
-
-
-import java.io.File;
-import jxl.*;
 /**
  * @author 李宗
  * @date 2021/8/4
  */
+import java.io.File;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
 public class Init_Data {
-    public static void main(String[] args) {
-        int i;
-        Sheet sheet;
-        Workbook book;
-        Cell cell1,cell2,cell3,cell4,cell5,cell6,cell7;
-        try {
-            //hello.xls为要读取的excel文件名
-            book= Workbook.getWorkbook(new File("D://hello.xls"));
+    public static void main(String[] args) throws Exception {
+        //Excel办公，以表格形式存在
+        //如何实现：1.fastExcel 2.jxl解析（第三方） 3.poi方式（第三方）
+        //通过jxl方式解析Excel步骤如下：
+        //1. 导入jxl的jar包
+        //2. 获取到Excel文件
+        File file = new File("D:\\data.xls");
+        Workbook wb =  Workbook.getWorkbook(file);
+        //3. 获取指定的sheet页码   通过指定的Sheet页的名字获取指定的Sheet页，也可以通过索引获取Sheet
+        Sheet sheet = wb.getSheet("Sheet1");
 
-            //获得第一个工作表对象(ecxel中sheet的编号从0开始,0,1,2,3,....)
-            sheet=book.getSheet(0);
-            //获取左上角的单元格
-            cell1=sheet.getCell(0,0);
-            System.out.println("标题："+cell1.getContents());
-
-            i=1;
-            while(true)
-            {
-                //获取每一行的单元格
-                cell1=sheet.getCell(0,i);//（列，行）
-                cell2=sheet.getCell(1,i);
-                cell3=sheet.getCell(2,i);
-                cell4=sheet.getCell(3,i);
-                cell5=sheet.getCell(4,i);
-                cell6=sheet.getCell(5,i);
-                cell7=sheet.getCell(6,i);
-                if("".equals(cell1.getContents())==true)    //如果读取的数据为空
-                    break;
-                System.out.println(cell1.getContents()+"\t"+cell2.getContents()+"\t"+cell3.getContents()+"\t"+cell4.getContents()
-                        +"\t"+cell5.getContents()+"\t"+cell6.getContents()+"\t"+cell7.getContents());
-                i++;
+        //4.1 循环获取指定的行和列的单元格的值     外循环控制行，内循环控制列
+        for (int i = 0; i < sheet.getRows(); i++) {
+            for (int j = 0; j < sheet.getColumns(); j++) {
+                Cell cell = sheet.getCell(j,i);
+                System.out.print(cell.getContents()+"\t");      //\t代表tab键的字符
             }
-            book.close();
+            System.out.println();               //设置每查询完一行就换行
         }
-        catch(Exception e)  { }
+        wb.close();    //将工作簿的资源关闭
     }
+
 }
